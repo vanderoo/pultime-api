@@ -1,0 +1,13 @@
+# Ignore node_modules folder to prevent copying it to Docker image
+node_modules
+
+# Ignore environment files for security
+.env
+
+# Ignore build artifacts (e.g., TypeScript output)
+dist
+
+# Ignore other unnecessary files
+.git
+.gitignore
+Dockerfile

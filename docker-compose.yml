@@ -1,0 +1,111 @@
+version: '3.8'
+
+services:
+  authentication-service:
+    build:
+      context: services/authentication-service
+      dockerfile: Dockerfile
+      args:
+        DATABASE_URL: ${AUTH_DB_URL}
+    env_file:
+      - services/authentication-service/.env
+    environment:
+      - DATABASE_URL=${AUTH_DB_URL}
+    ports:
+      - "3001:3000"
+    networks:
+      - app-network
+
+  user-service:
+    build:
+      context: services/user-service
+      dockerfile: Dockerfile
+      args:
+        DATABASE_URL: ${USER_DB_URL}
+    env_file:
+      - services/user-service/.env
+    environment:
+      - DATABASE_URL=${USER_DB_URL}
+    ports:
+      - "3002:3000"
+    networks:
+      - app-network
+
+  classroom-service:
+    build:
+      context: services/classroom-service
+      dockerfile: Dockerfile
+      args:
+        DATABASE_URL: ${CLASSROOM_DB_URL}
+    env_file:
+      - services/classroom-service/.env
+    environment:
+      - DATABASE_URL=${CLASSROOM_DB_URL}
+    ports:
+      - "3003:3000"
+    networks:
+      - app-network
+
+  task-service:
+    build:
+      context: services/task-service
+      dockerfile: Dockerfile
+      args:
+        DATABASE_URL: ${TASK_DB_URL}
+    env_file:
+      - services/task-service/.env
+    environment:
+      - DATABASE_URL=${TASK_DB_URL}
+    ports:
+      - "3004:3000"
+    networks:
+      - app-network
+
+  team-service:
+    build:
+      context: services/team-service
+      dockerfile: Dockerfile
+      args:
+        DATABASE_URL: ${TEAM_DB_URL}
+    env_file:
+      - services/team-service/.env
+    environment:
+      - DATABASE_URL=${TEAM_DB_URL}
+    ports:
+      - "3005:3000"
+    networks:
+      - app-network
+
+  notification-service:
+    build:
+      context: services/notification-service
+      dockerfile: Dockerfile
+      args:
+        DATABASE_URL: ${NOTIFICATION_DB_URL}
+    env_file:
+      - services/notification-service/.env
+    environment:
+      - DATABASE_URL=${NOTIFICATION_DB_URL}
+    ports:
+      - "3006:3000"
+    networks:
+      - app-network
+
+  ai-assistant-service:
+    build:
+      context: services/ai-assistant-service
+      dockerfile: Dockerfile
+      args:
+        DATABASE_URL: ${AI_ASSISTANT_DB_URL}
+    env_file:
+      - services/ai-assistant-service/.env
+    environment:
+      - DATABASE_URL=${AI_ASSISTANT_DB_URL}
+    ports:
+      - "3007:3000"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

@@ -1,0 +1,100 @@
+version: '3.8'
+
+services:
+  kong-migrations:
+    image: kong:latest
+    command: kong migrations bootstrap
+    depends_on:
+      - kong-db
+    environment:
+      KONG_DATABASE: postgres
+      KONG_PG_DATABASE: ${KONG_DB_NAME}
+      KONG_PG_HOST: kong-db
+      KONG_PG_USER: ${KONG_PG_USER}
+      KONG_PG_PASSWORD: ${KONG_PG_PASSWORD}
+    networks:
+      - pultime-api_app-network
+    restart: on-failure
+
+  kong-migrations-up:
+    image: kong:latest
+    command: kong migrations up && kong migrations finish
+    depends_on:
+      - kong-db
+    environment:
+      KONG_DATABASE: postgres
+      KONG_PG_DATABASE: ${KONG_DB_NAME}
+      KONG_PG_HOST: kong-db
+      KONG_PG_USER: ${KONG_PG_USER}
+      KONG_PG_PASSWORD: ${KONG_PG_PASSWORD}
+    networks:
+      - pultime-api_app-network
+    restart: on-failure
+
+  kong:
+    image: kong:latest
+    environment:
+      KONG_DATABASE: postgres
+      KONG_PG_HOST: kong-db
+      KONG_PG_PORT: 5432
+      KONG_PG_USER: ${KONG_PG_USER}
+      KONG_PG_PASSWORD: ${KONG_PG_PASSWORD}
+      KONG_PROXY_ACCESS_LOG: /dev/stdout
+      KONG_ADMIN_ACCESS_LOG: /dev/stdout
+      KONG_PROXY_ERROR_LOG: /dev/stderr
+      KONG_ADMIN_ERROR_LOG: /dev/stderr
+      KONG_ADMIN_LISTEN: 0.0.0.0:8001
+    ports:
+      - "8000:8000"
+      - "8001:8001"
+    depends_on:
+      - kong-migrations
+      - kong-migrations-up
+      - kong-db
+    networks:
+      - pultime-api_app-network
+
+  kong-db:
+    image: postgres:9.6
+    environment:
+      POSTGRES_USER: ${KONG_PG_USER}
+      POSTGRES_DB: ${KONG_DB_NAME}
+      POSTGRES_PASSWORD: ${KONG_PG_PASSWORD}
+    ports:
+      - "5432:5432"
+    volumes:
+      - kong_db_data:/var/lib/postgresql/data
+    networks:
+      - pultime-api_app-network
+
+  konga-prepare:
+    image: pantsel/konga:latest
+    command: "-c prepare -a postgres -u postgresql://${KONG_PG_USER}:${KONG_PG_PASSWORD}@kong-db:5432/${KONG_DB_NAME}"
+    depends_on:
+      - kong-db
+    networks:
+      - pultime-api_app-network
+    restart: on-failure
+
+  konga:
+    image: pantsel/konga:latest
+    ports:
+      - "1337:1337"  # Port untuk Konga UI
+    environment:
+      NODE_ENV: production
+      DB_ADAPTER: postgres
+      DB_URI: postgres://${KONG_PG_USER}:${KONG_PG_PASSWORD}@kong-db:5432/${KONG_DB_NAME}
+      KONGA_HOOK_TIMEOUT: 120000
+      KONGA_LOG_LEVEL: info
+    depends_on:
+      - kong
+    networks:
+      - pultime-api_app-network
+
+volumes:
+  kong_db_data:
+    driver: local
+
+networks:
+  pultime-api_app-network:
+    external: true
