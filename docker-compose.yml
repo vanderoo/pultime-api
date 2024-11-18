@@ -3,12 +3,12 @@ version: '3.8'
 services:
   authentication-service:
     build:
-      context: services/authentication-service
+      context: apps/authentication-service
       dockerfile: Dockerfile
       args:
         DATABASE_URL: ${AUTH_DB_URL}
     env_file:
-      - services/authentication-service/.env
+      - apps/authentication-service/.env
     environment:
       - DATABASE_URL=${AUTH_DB_URL}
     ports:
@@ -18,12 +18,12 @@ services:
 
   user-service:
     build:
-      context: services/user-service
+      context: apps/user-service
       dockerfile: Dockerfile
       args:
         DATABASE_URL: ${USER_DB_URL}
     env_file:
-      - services/user-service/.env
+      - apps/user-service/.env
     environment:
       - DATABASE_URL=${USER_DB_URL}
     ports:
@@ -33,12 +33,12 @@ services:
 
   classroom-service:
     build:
-      context: services/classroom-service
+      context: apps/classroom-service
       dockerfile: Dockerfile
       args:
         DATABASE_URL: ${CLASSROOM_DB_URL}
     env_file:
-      - services/classroom-service/.env
+      - apps/classroom-service/.env
     environment:
       - DATABASE_URL=${CLASSROOM_DB_URL}
     ports:
@@ -48,12 +48,12 @@ services:
 
   task-service:
     build:
-      context: services/task-service
+      context: apps/task-service
       dockerfile: Dockerfile
       args:
         DATABASE_URL: ${TASK_DB_URL}
     env_file:
-      - services/task-service/.env
+      - apps/task-service/.env
     environment:
       - DATABASE_URL=${TASK_DB_URL}
     ports:
@@ -63,12 +63,12 @@ services:
 
   team-service:
     build:
-      context: services/team-service
+      context: apps/team-service
       dockerfile: Dockerfile
       args:
         DATABASE_URL: ${TEAM_DB_URL}
     env_file:
-      - services/team-service/.env
+      - apps/team-service/.env
     environment:
       - DATABASE_URL=${TEAM_DB_URL}
     ports:
@@ -78,12 +78,12 @@ services:
 
   notification-service:
     build:
-      context: services/notification-service
+      context: apps/notification-service
       dockerfile: Dockerfile
       args:
         DATABASE_URL: ${NOTIFICATION_DB_URL}
     env_file:
-      - services/notification-service/.env
+      - apps/notification-service/.env
     environment:
       - DATABASE_URL=${NOTIFICATION_DB_URL}
     ports:
@@ -93,12 +93,12 @@ services:
 
   ai-assistant-service:
     build:
-      context: services/ai-assistant-service
+      context: apps/ai-assistant-service
       dockerfile: Dockerfile
       args:
         DATABASE_URL: ${AI_ASSISTANT_DB_URL}
     env_file:
-      - services/ai-assistant-service/.env
+      - apps/ai-assistant-service/.env
     environment:
       - DATABASE_URL=${AI_ASSISTANT_DB_URL}
     ports:
