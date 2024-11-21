@@ -1,14 +1,19 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
     <title>PulTime API Documentation</title>
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.18.3/swagger-ui.css" />
+    <style>
+        .swagger-ui .info hgroup.main a {
+            display: none
+        }
+        #swagger-ui {
+            display: none;
+        }
+    </style>
 </head>
 <body>
-<style>
-    .swagger-ui .info hgroup.main a {
-        display: none
-    }
-</style>
 <div id="swagger-ui"></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.18.3/swagger-ui-bundle.js"></script>
 <script>
@@ -20,7 +25,11 @@
             SwaggerUIBundle.presets.apis,
             SwaggerUIBundle.presets.singlePage
         ],
+        onComplete: function() {
+            document.getElementById('swagger-ui').style.display = 'block';
+        }
     });
 </script>
+
 </body>
 </html>
