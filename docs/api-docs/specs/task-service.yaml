@@ -1,0 +1,145 @@
+openapi: 3.1.0
+info:
+  title: PulTime Task Service API
+  version: 1.0.0
+
+paths:
+  /task:
+    post:
+      tags:
+        - Task
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/task-schema.yaml#/components/schemas/TaskRequest'
+      responses:
+        200:
+          description: Berhasil membuat tugas
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/task-schema.yaml#/components/schemas/TaskResponse'
+        400:
+          description: Gagal membuat tugas
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/error-schema.yaml#/components/schemas/ErrorResponse'
+
+  /task/{id}:
+    put:
+      tags:
+        - Task
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID tugas yang ingin diupdate
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/task-schema.yaml#/components/schemas/TaskRequest'
+      responses:
+        200:
+          description: Berhasil update data tugas
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/task-schema.yaml#/components/schemas/TaskResponse'
+        400:
+          description: Gagal update data tugas
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/error-schema.yaml#/components/schemas/ErrorResponse'
+
+    delete:
+      tags:
+        - Task
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID tugas yang ingin dihapus
+          schema:
+            type: string
+      responses:
+        200:
+          description: Berhasil menghapus tugas
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/task-schema.yaml#/components/schemas/TaskResponse'
+        400:
+          description: Gagal menghapus tugas
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/error-schema.yaml#/components/schemas/ErrorResponse'
+
+    get:
+      tags:
+        - Task
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID tugas yang ingin diambil
+          schema:
+            type: string
+      responses:
+        200:
+          description: Berhasil mengambil data tugas
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/task-schema.yaml#/components/schemas/TaskResponse'
+        400:
+          description: Gagal mengambil data tugas
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/error-schema.yaml#/components/schemas/ErrorResponse'
+
+  /tasks:
+    get:
+      tags:
+        - Task
+      parameters:
+        - name: type
+          in: query
+          required: true
+          description: Jenis filter untuk tugas (class, team, atau user)
+          schema:
+            type: string
+            enum:
+              - class
+              - team
+              - user
+        - name: id
+          in: query
+          required: true
+          description: ID yang digunakan untuk memfilter (ID class, team, atau user)
+          schema:
+            type: string
+      responses:
+        200:
+          description: Berhasil mengambil daftar tugas berdasarkan filter
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '../schemas/task-schema.yaml#/components/schemas/TaskResponse'
+        400:
+          description: Gagal mengambil daftar tugas
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/error-schema.yaml#/components/schemas/ErrorResponse'

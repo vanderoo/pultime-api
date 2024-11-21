@@ -1,0 +1,188 @@
+openapi: 3.1.0
+info:
+  title: PulTime Team Service API
+  version: 1.0.0
+
+paths:
+  /team:
+    post:
+      tags:
+        - Team
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/team-schema.yaml#/components/schemas/TeamRequest'
+      responses:
+        200:
+          description: Berhasil membuat team
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/team-schema.yaml#/components/schemas/TeamResponse'
+        400:
+          description: Gagal membuat team
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/error-schema.yaml#/components/schemas/ErrorResponse'
+
+  /team/{id}:
+    put:
+      tags:
+        - Team
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID team yang ingin diupdate
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/team-schema.yaml#/components/schemas/TeamRequest'
+      responses:
+        200:
+          description: Berhasil update data team
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/team-schema.yaml#/components/schemas/TeamResponse'
+        400:
+          description: Gagal update data team
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/error-schema.yaml#/components/schemas/ErrorResponse'
+
+    delete:
+      tags:
+        - Team
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID team yang ingin dihapus
+          schema:
+            type: string
+      responses:
+        200:
+          description: Berhasil menghapus team
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/team-schema.yaml#/components/schemas/TeamResponse'
+        400:
+          description: Gagal menghapus team
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/error-schema.yaml#/components/schemas/ErrorResponse'
+
+    get:
+      tags:
+        - Team
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID team yang ingin diambil
+          schema:
+            type: string
+      responses:
+        200:
+          description: Berhasil mengambil data team
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/team-schema.yaml#/components/schemas/TeamResponse'
+        400:
+          description: Gagal mengambil data team
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/error-schema.yaml#/components/schemas/ErrorResponse'
+
+  /team/{id}/users:
+    get:
+      tags:
+        - Team
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID team yang ingin diambil
+          schema:
+            type: string
+      responses:
+        200:
+          description: Berhasil mengambil data member team
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/team-schema.yaml#/components/schemas/TeamMembersResponse'
+        400:
+          description: Gagal mengambil data member team
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/error-schema.yaml#/components/schemas/ErrorResponse'
+
+  /team/{id}/users/{user_id}:
+    delete:
+      tags:
+        - Team
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID team yang ingin diakses
+          schema:
+            type: string
+        - name: user_id
+          in: path
+          required: true
+          description: ID user yang ingin dihapus
+          schema:
+            type: string
+      responses:
+        200:
+          description: Berhasil hapus user dari team
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/team-schema.yaml#/components/schemas/TeamMembersResponse'
+        400:
+          description: Gagal hapus user dari team
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/error-schema.yaml#/components/schemas/ErrorResponse'
+
+  /team/users:
+    post:
+      tags:
+        - Team
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/team-schema.yaml#/components/schemas/TeamMemberRequest'
+      responses:
+        200:
+          description: Berhasil memasukkan user
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/team-schema.yaml#/components/schemas/TeamMemberResponse'
+        400:
+          description: Gagal memasukkan user
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/error-schema.yaml#/components/schemas/ErrorResponse'

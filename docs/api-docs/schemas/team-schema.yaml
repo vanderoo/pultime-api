@@ -1,14 +1,48 @@
 components:
   schemas:
-    UpdateUserRequest:
+    TeamRequest:
       type: object
       properties:
-        username:
+        team_name:
           type: string
       required:
-        - username
+      - team_name
 
-    GetUserByIdResponse:
+    TeamResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          example: 200
+        status:
+          type: string
+          example: OK
+        data:
+          type: object
+          properties:
+            id:
+              type: string
+            team_name:
+              type: string
+            team_code:
+              type: string
+            createdAt:
+              type: string
+            updatedAt:
+              type: string
+
+    TeamMemberRequest:
+      type: object
+      properties:
+        user_id:
+          type: string
+        team_code:
+          type: string
+      required:
+        - user_id
+        - team_code
+
+    TeamMemberResponse:
       type: object
       properties:
         code:
@@ -31,7 +65,7 @@ components:
             updatedAt:
               type: string
 
-    GetUserClassesResponse:
+    TeamMembersResponse:
       type: object
       properties:
         code:
@@ -47,45 +81,12 @@ components:
             properties:
               id:
                 type: string
-              class_name:
+              email:
                 type: string
-              courses:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    id:
-                      type: string
-                    course_name:
-                      type: string
-                    createdAt:
-                      type: string
-                    updatedAt:
-                      type: string
+              username:
+                type: string
               createdAt:
                 type: string
               updatedAt:
                 type: string
 
-    GetUserTeamsResponse:
-      type: object
-      properties:
-        code:
-          type: integer
-          example: 200
-        status:
-          type: string
-          example: OK
-        data:
-          type: array
-          items:
-            type: object
-            properties:
-              id:
-                type: string
-              team_name:
-                type: string
-              createdAt:
-                type: string
-              updatedAt:
-                type: string

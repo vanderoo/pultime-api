@@ -1,0 +1,188 @@
+openapi: 3.1.0
+info:
+  title: PulTime Class Service API
+  version: 1.0.0
+
+paths:
+  /class:
+    post:
+      tags:
+        - Class
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/class-schema.yaml#/components/schemas/ClassRequest'
+      responses:
+        200:
+          description: Berhasil membuat kelas
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/class-schema.yaml#/components/schemas/ClassResponse'
+        400:
+          description: Gagal membuat kelas
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/error-schema.yaml#/components/schemas/ErrorResponse'
+
+  /class/{id}:
+    put:
+      tags:
+        - Class
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID kelas yang ingin diupdate
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/class-schema.yaml#/components/schemas/ClassUpdateRequest'
+      responses:
+        200:
+          description: Berhasil update data kelas
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/class-schema.yaml#/components/schemas/ClassResponse'
+        400:
+          description: Gagal update data kelas
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/error-schema.yaml#/components/schemas/ErrorResponse'
+
+    delete:
+      tags:
+        - Class
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID kelas yang ingin dihapus
+          schema:
+            type: string
+      responses:
+        200:
+          description: Berhasil menghapus kelas
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/class-schema.yaml#/components/schemas/ClassResponse'
+        400:
+          description: Gagal menghapus kelas
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/error-schema.yaml#/components/schemas/ErrorResponse'
+
+    get:
+      tags:
+        - Class
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID kelas yang ingin diambil
+          schema:
+            type: string
+      responses:
+        200:
+          description: Berhasil mengambil data kelas
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/class-schema.yaml#/components/schemas/ClassResponse'
+        400:
+          description: Gagal mengambil data kelas
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/error-schema.yaml#/components/schemas/ErrorResponse'
+
+  /class/{id}/users:
+    get:
+      tags:
+        - Class
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID kelas yang ingin diambil
+          schema:
+            type: string
+      responses:
+        200:
+          description: Berhasil mengambil data member kelas
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/class-schema.yaml#/components/schemas/ClassMembersResponse'
+        400:
+          description: Gagal mengambil data member kelas
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/error-schema.yaml#/components/schemas/ErrorResponse'
+
+  /class/{id}/users/{user_id}:
+    delete:
+      tags:
+        - Class
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID kelas yang ingin diakses
+          schema:
+            type: string
+        - name: user_id
+          in: path
+          required: true
+          description: ID user yang ingin dihapus
+          schema:
+            type: string
+      responses:
+        200:
+          description: Berhasil hapus user dari kelas
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/class-schema.yaml#/components/schemas/ClassMembersResponse'
+        400:
+          description: Gagal hapus user dari kelas
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/error-schema.yaml#/components/schemas/ErrorResponse'
+
+  /class/users:
+    post:
+      tags:
+        - Class
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/class-schema.yaml#/components/schemas/ClassMemberRequest'
+      responses:
+        200:
+          description: Berhasil memasukkan user
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/class-schema.yaml#/components/schemas/ClassMemberResponse'
+        400:
+          description: Gagal memasukkan user
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/error-schema.yaml#/components/schemas/ErrorResponse'

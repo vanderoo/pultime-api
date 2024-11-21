@@ -4,44 +4,32 @@ info:
   version: 1.0.0
 
 paths:
-  /users:
-    get:
-      tags:
-        - User
-      responses:
-        200:
-          description: Berhasil mengambil data pengguna
-          content:
-            application/json:
-              schema:
-                $ref: '../schemas/user-schema.yaml#/components/schemas/GetUsersResponse'
-        400:
-          description: Gagal mendaftarkan pengguna
-          content:
-            application/json:
-              schema:
-                $ref: '../schemas/error-schema.yaml#/components/schemas/ErrorResponse'
-
   /user/{id}:
-    get:
+    patch:
       tags:
         - User
       parameters:
         - name: id
           in: path
           required: true
-          description: ID pengguna yang ingin diambil
+          description: ID pengguna yang ingin diupdate
           schema:
             type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/user-schema.yaml#/components/schemas/UpdateUserRequest'
       responses:
         200:
-          description: Berhasil mengambil data pengguna
+          description: Berhasil update pengguna
           content:
             application/json:
               schema:
                 $ref: '../schemas/user-schema.yaml#/components/schemas/GetUserByIdResponse'
         400:
-          description: Gagal mendaftarkan pengguna
+          description: Gagal update pengguna
           content:
             application/json:
               schema:
@@ -71,7 +59,6 @@ paths:
               schema:
                 $ref: '../schemas/error-schema.yaml#/components/schemas/ErrorResponse'
 
-  /user/{id}/classes:
     get:
       tags:
         - User
@@ -88,9 +75,34 @@ paths:
           content:
             application/json:
               schema:
+                $ref: '../schemas/user-schema.yaml#/components/schemas/GetUserByIdResponse'
+        400:
+          description: Gagal mengambil data pengguna
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/error-schema.yaml#/components/schemas/ErrorResponse'
+
+  /user/{id}/classes:
+    get:
+      tags:
+        - User
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID pengguna yang ingin diambil
+          schema:
+            type: string
+      responses:
+        200:
+          description: Berhasil mengambil data kelas pengguna
+          content:
+            application/json:
+              schema:
                 $ref: '../schemas/user-schema.yaml#/components/schemas/GetUserClassesResponse'
         400:
-          description: Gagal mendaftarkan pengguna
+          description: Gagal mengambil data kelas pengguna
           content:
             application/json:
               schema:
@@ -109,13 +121,13 @@ paths:
             type: string
       responses:
         200:
-          description: Berhasil mengambil data pengguna
+          description: Berhasil mengambil data tim pengguna
           content:
             application/json:
               schema:
                 $ref: '../schemas/user-schema.yaml#/components/schemas/GetUserTeamsResponse'
         400:
-          description: Gagal mendaftarkan pengguna
+          description: Gagal mengambil data tim pengguna
           content:
             application/json:
               schema:

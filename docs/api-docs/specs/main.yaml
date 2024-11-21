@@ -2,6 +2,11 @@ openapi: 3.0.0
 info:
   title: PulTime API
   version: 1.0.0
+  description: This Swagger documentation provides the API endpoints for the PulTime website.
+  contact:
+    name: Evander Tokang
+    url: https://www.linkedin.com/in/evandertk
+    email: tokang.evander@gmail.com
 servers:
   - url: 'http://localhost:8000'
 paths:
@@ -23,9 +28,6 @@ paths:
   /auth/reset-password:
     $ref: './auth-service.yaml#/paths/~1auth~1reset-password'
 
-  /users:
-    $ref: './user-service.yaml#/paths/~1users'
-
   /user/{id}:
     $ref: './user-service.yaml#/paths/~1user~1{id}'
 
@@ -35,3 +37,41 @@ paths:
   /user/{id}/teams:
     $ref: './user-service.yaml#/paths/~1user~1{id}~1teams'
 
+  /class:
+    $ref: './class-service.yaml#/paths/~1class'
+
+  /class/{id}:
+    $ref: './class-service.yaml#/paths/~1class~1{id}'
+
+  /class/{id}/users:
+    $ref: './class-service.yaml#/paths/~1class~1{id}~1users'
+
+  /class/{id}/users/{user_id}:
+    $ref: './class-service.yaml#/paths/~1class~1{id}~1users~1{user_id}'
+
+  /class/users:
+    $ref: './class-service.yaml#/paths/~1class~1users'
+
+  /team:
+    $ref: './team-service.yaml#/paths/~1team'
+
+  /team/{id}:
+    $ref: './team-service.yaml#/paths/~1team~1{id}'
+
+  /team/{id}/users:
+    $ref: './team-service.yaml#/paths/~1team~1{id}~1users'
+
+  /team/{id}/users/{user_id}:
+    $ref: './team-service.yaml#/paths/~1team~1{id}~1users~1{user_id}'
+
+  /team/users:
+    $ref: './team-service.yaml#/paths/~1team~1users'
+
+  /task:
+    $ref: './task-service.yaml#/paths/~1task'
+
+  /task/{id}:
+    $ref: './task-service.yaml#/paths/~1task~1{id}'
+
+  /tasks:
+    $ref: './task-service.yaml#/paths/~1tasks'
