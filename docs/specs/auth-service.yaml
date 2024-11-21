@@ -1,0 +1,155 @@
+openapi: 3.1.0
+info:
+  title: PulTime Authentication Service API
+  version: 1.0.0
+paths:
+  /auth/register:
+    post:
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/auth-schema.yaml#/components/schemas/RegisterRequest'
+      responses:
+        201:
+          description: Berhasil mendaftarkan pengguna
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/auth-schema.yaml#/components/schemas/RegisterResponse'
+        400:
+          description: Gagal mendaftarkan pengguna
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/error-schema.yaml#/components/schemas/ErrorResponse'
+
+  /auth/login:
+    post:
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/auth-schema.yaml#/components/schemas/LoginRequest'
+      responses:
+        200:
+          description: Berhasil login
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/auth-schema.yaml#/components/schemas/LoginResponse'
+        401:
+          description: Kredensial tidak valid
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/error-schema.yaml#/components/schemas/ErrorResponse'
+
+  /auth/logout:
+    post:
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/auth-schema.yaml#/components/schemas/LogoutRequest'
+      responses:
+        200:
+          description: Berhasil logout
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/auth-schema.yaml#/components/schemas/LogoutResponse'
+        400:
+          description: Token tidak valid
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/error-schema.yaml#/components/schemas/ErrorResponse'
+
+  /auth/refresh-token:
+    post:
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/auth-schema.yaml#/components/schemas/RefreshTokenRequest'
+      responses:
+        200:
+          description: Berhasil refresh token
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/auth-schema.yaml#/components/schemas/RefreshTokenResponse'
+        403:
+          description: Refresh token tidak valid
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/error-schema.yaml#/components/schemas/ErrorResponse'
+
+  /auth/request-reset-password:
+    post:
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/auth-schema.yaml#/components/schemas/ReqResetPasswordRequest'
+      responses:
+        200:
+          description: Permintaan reset password berhasil
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/auth-schema.yaml#/components/schemas/ReqResetPasswordResponse'
+        404:
+          description: Email tidak ditemukan
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/error-schema.yaml#/components/schemas/ErrorResponse'
+
+  /auth/reset-password:
+    post:
+      tags:
+        - Authentication
+      parameters:
+        - name: token
+          in: query
+          required: true
+          description: Token untuk verifikasi reset password
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/auth-schema.yaml#/components/schemas/ResetPasswordRequest'
+      responses:
+        200:
+          description: Berhasil reset password
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/auth-schema.yaml#/components/schemas/ResetPasswordResponse'
+        400:
+          description: Token tidak valid atau kedaluwarsa
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/error-schema.yaml#/components/schemas/ErrorResponse'

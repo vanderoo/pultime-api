@@ -1,0 +1,164 @@
+components:
+  schemas:
+    RegisterRequest:
+      type: object
+      properties:
+        email:
+          type: string
+        username:
+          type: string
+        password:
+          type: string
+        confirmPassword:
+          type: string
+      required:
+        - email
+        - username
+        - password
+        - confirmPassword
+
+    RegisterResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          example: 201
+        status:
+          type: string
+          example: USER_CREATED
+        data:
+          type: object
+          properties:
+            id:
+              type: string
+            email:
+              type: string
+            username:
+              type: string
+            createdAt:
+              type: string
+            updatedAt:
+              type: string
+
+    LoginRequest:
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+      required:
+        - username
+        - password
+
+    LoginResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          example: 200
+        status:
+          type: string
+          example: OK
+        data:
+          type: object
+          properties:
+            accessToken:
+              type: string
+            refreshToken:
+              type: string
+
+    LogoutRequest:
+      type: object
+      properties:
+        refreshToken:
+          type: string
+      required:
+        - refreshToken
+
+    LogoutResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          example: 200
+        status:
+          type: string
+          example: OK
+        data:
+          type: object
+          properties:
+            message:
+              type: string
+              example: Successfully logged out
+
+    RefreshTokenRequest:
+      type: object
+      properties:
+        refreshToken:
+          type: string
+      required:
+        - refreshToken
+
+    RefreshTokenResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          example: 200
+        status:
+          type: string
+          example: OK
+        data:
+          type: object
+          properties:
+            accessToken:
+              type: string
+
+    ReqResetPasswordRequest:
+      type: object
+      properties:
+        email:
+          type: string
+      required:
+        - email
+
+    ReqResetPasswordResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          example: 200
+        status:
+          type: string
+          example: OK
+        data:
+          type: object
+          properties:
+            message:
+              type: string
+              example: Password reset email sent successfully. Please check your email for further instructions.
+
+    ResetPasswordRequest:
+      type: object
+      properties:
+        newPassword:
+          type: string
+      required:
+        - newPassword
+
+    ResetPasswordResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          example: 200
+        status:
+          type: string
+          example: OK
+        data:
+          type: object
+          properties:
+            message:
+              type: string
+              example: Password has been reset successfully.

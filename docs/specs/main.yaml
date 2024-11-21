@@ -1,0 +1,37 @@
+openapi: 3.0.0
+info:
+  title: Combined API
+  version: 1.0.0
+servers:
+  - url: 'http://localhost:8000'
+paths:
+  /auth/register:
+    $ref: './auth-service.yaml#/paths/~1auth~1register'
+
+  /auth/login:
+    $ref: './auth-service.yaml#/paths/~1auth~1login'
+
+  /auth/logout:
+    $ref: './auth-service.yaml#/paths/~1auth~1logout'
+
+  /auth/refresh-token:
+    $ref: './auth-service.yaml#/paths/~1auth~1refresh-token'
+
+  /auth/request-reset-password:
+    $ref: './auth-service.yaml#/paths/~1auth~1request-reset-password'
+
+  /auth/reset-password:
+    $ref: './auth-service.yaml#/paths/~1auth~1reset-password'
+
+  /users:
+    $ref: './user-service.yaml#/paths/~1users'
+
+  /user/{id}:
+    $ref: './user-service.yaml#/paths/~1user~1{id}'
+
+  /user/{id}/classes:
+    $ref: './user-service.yaml#/paths/~1user~1{id}~1classes'
+
+  /user/{id}/teams:
+    $ref: './user-service.yaml#/paths/~1user~1{id}~1teams'
+

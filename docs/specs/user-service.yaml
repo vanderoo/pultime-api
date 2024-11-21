@@ -1,0 +1,122 @@
+openapi: 3.1.0
+info:
+  title: PulTime User Service API
+  version: 1.0.0
+
+paths:
+  /users:
+    get:
+      tags:
+        - User
+      responses:
+        200:
+          description: Berhasil mengambil data pengguna
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/user-schema.yaml#/components/schemas/GetUsersResponse'
+        400:
+          description: Gagal mendaftarkan pengguna
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/error-schema.yaml#/components/schemas/ErrorResponse'
+
+  /user/{id}:
+    get:
+      tags:
+        - User
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID pengguna yang ingin diambil
+          schema:
+            type: string
+      responses:
+        200:
+          description: Berhasil mengambil data pengguna
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/user-schema.yaml#/components/schemas/GetUserByIdResponse'
+        400:
+          description: Gagal mendaftarkan pengguna
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/error-schema.yaml#/components/schemas/ErrorResponse'
+
+    delete:
+      tags:
+        - User
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID pengguna yang ingin dihapus
+          schema:
+            type: string
+      responses:
+        200:
+          description: Berhasil menghapus pengguna
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/user-schema.yaml#/components/schemas/GetUserByIdResponse'
+        400:
+          description: Gagal menghapus pengguna
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/error-schema.yaml#/components/schemas/ErrorResponse'
+
+  /user/{id}/classes:
+    get:
+      tags:
+        - User
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID pengguna yang ingin diambil
+          schema:
+            type: string
+      responses:
+        200:
+          description: Berhasil mengambil data pengguna
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/user-schema.yaml#/components/schemas/GetUserClassesResponse'
+        400:
+          description: Gagal mendaftarkan pengguna
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/error-schema.yaml#/components/schemas/ErrorResponse'
+
+  /user/{id}/teams:
+    get:
+      tags:
+        - User
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID pengguna yang ingin diambil
+          schema:
+            type: string
+      responses:
+        200:
+          description: Berhasil mengambil data pengguna
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/user-schema.yaml#/components/schemas/GetUserTeamsResponse'
+        400:
+          description: Gagal mendaftarkan pengguna
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/error-schema.yaml#/components/schemas/ErrorResponse'

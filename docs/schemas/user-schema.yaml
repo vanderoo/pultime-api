@@ -1,0 +1,110 @@
+components:
+  schemas:
+    GetUsersResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          example: 200
+        status:
+          type: string
+          example: OK
+        data:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              email:
+                type: string
+              username:
+                type: string
+              createdAt:
+                type: string
+              updatedAt:
+                type: string
+        page:
+          type: null
+
+    GetUserByIdResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          example: 200
+        status:
+          type: string
+          example: OK
+        data:
+          type: object
+          properties:
+            id:
+              type: string
+            email:
+              type: string
+            username:
+              type: string
+            createdAt:
+              type: string
+            updatedAt:
+              type: string
+
+    GetUserClassesResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          example: 200
+        status:
+          type: string
+          example: OK
+        data:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              class_name:
+                type: string
+              subjects:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    subject:
+                      type: string
+                    createdAt:
+                      type: string
+                    updatedAt:
+                      type: string
+              createdAt:
+                type: string
+              updatedAt:
+                type: string
+
+    GetUserTeamsResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          example: 200
+        status:
+          type: string
+          example: OK
+        data:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              team_name:
+                type: string
+              createdAt:
+                type: string
+              updatedAt:
+                type: string
