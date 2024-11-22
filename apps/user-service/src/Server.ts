@@ -1,3 +1,4 @@
+import cors from "cors";
 import express, { Express } from "express";
 import { PrismaClient } from "@prisma/client";
 import { apiRoutes } from "./routes";
@@ -24,9 +25,18 @@ export class Server {
   }
 
   private setupRoutes() {
+    const corsOptions = {
+      origin: '*',
+      methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+      allowedHeaders: ['Content-Type', 'Authorization'],
+      credentials: true,
+    };
+
+    this.app.use(cors(corsOptions));
+
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: true }));
-    this.app.use(apiRoutes(this.prisma));
+    this.app.use('/user', apiRoutes(this.prisma));
   }
 
   public async start() {

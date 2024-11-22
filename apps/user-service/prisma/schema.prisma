@@ -13,4 +13,38 @@ model User {
   username  String   @unique @db.VarChar(255)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  classes Class[]
+  teams   Team[]
+}
+
+model Class {
+  id        String   @id @default(uuid())
+  className String   @db.VarChar(255)
+  classCode String   @unique @db.VarChar(255)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  users    User[]
+  courseId String
+  course   Course @relation(fields: [courseId], references: [id])
+}
+
+model Course {
+  id         String   @id @default(uuid())
+  courseName String   @db.VarChar(255)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  classes Class[]
+}
+
+model Team {
+  id        String   @id @default(uuid())
+  teamName  String   @db.VarChar(255)
+  teamCode  String   @unique @db.VarChar(255)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  users User[]
 }
