@@ -4,7 +4,7 @@ import { sendErrorResponse, sendSuccessResponse } from "../utils/response";
 import { ApiError } from "../utils/api-error";
 
 export class AuthController {
-    private authService: AuthService
+    private authService: AuthService;
 
     constructor(authService: AuthService) {
         this.authService = authService;

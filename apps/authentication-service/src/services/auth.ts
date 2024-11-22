@@ -4,7 +4,6 @@ import { Secret } from "jsonwebtoken";
 import { PrismaClient } from "@prisma/client";
 import { IAuthService, IToken, IUser } from "../interfaces/auth";
 import { ApiError } from "../utils/api-error";
-import * as process from "node:process";
 import {generateToken, validateToken} from "../utils/token";
 
 export class AuthService implements IAuthService {
