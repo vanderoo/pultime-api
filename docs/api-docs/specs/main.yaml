@@ -10,8 +10,8 @@ info:
 servers:
   - url: 'http://localhost:8000'
 paths:
-  /auth/register:
-    $ref: './auth-service.yaml#/paths/~1auth~1register'
+  /auth/signup:
+    $ref: './auth-service.yaml#/paths/~1auth~1signup'
 
   /auth/login:
     $ref: './auth-service.yaml#/paths/~1auth~1login'
