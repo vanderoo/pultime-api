@@ -1,9 +1,9 @@
 export interface IUser {
-    id: string,
-    email: string,
-    username: string,
-    createdAt: Date,
-    updatedAt: Date
+    id: string;
+    email: string;
+    username: string;
+    createdAt: Date;
+    updatedAt: Date;
 }
 
 export interface IToken {
@@ -14,7 +14,7 @@ export interface IToken {
 }
   
 export interface IAuthService {
-    register(email: string, username: string, password: string, confirmPassword: string): Promise<IUser>;
+    signup(email: string, username: string, password: string, confirmPassword: string): Promise<IUser>;
     login(username: string, password: string): Promise<IToken>;
     logout(token: string): Promise<void>
     requestResetPassword(email: string): Promise<void>;

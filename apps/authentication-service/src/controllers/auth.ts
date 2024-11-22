@@ -10,10 +10,10 @@ export class AuthController {
         this.authService = authService;
     }
 
-    async register(req: Request, res: Response) {
+    async signup(req: Request, res: Response) {
         try {
             const { email, username, password, confirmPassword } = req.body;
-            const data = await this.authService.register(email, username, password, confirmPassword);
+            const data = await this.authService.signup(email, username, password, confirmPassword);
             sendSuccessResponse(res, 201, 'USER_CREATED', data)
         } catch (error) {
             if (!(error instanceof ApiError)) {

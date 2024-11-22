@@ -6,7 +6,6 @@ import { IAuthService, IToken, IUser } from "../interfaces/auth";
 import { ApiError } from "../utils/api-error";
 import * as process from "node:process";
 import {generateToken, validateToken} from "../utils/token";
-import * as console from "node:console";
 
 export class AuthService implements IAuthService {
 
@@ -22,7 +21,7 @@ export class AuthService implements IAuthService {
         this.prisma = prisma;
     }
 
-    async register(email: string, username: string, password: string, confirmPassword: string): Promise<IUser> {
+    async signup(email: string, username: string, password: string, confirmPassword: string): Promise<IUser> {
         if (password !== confirmPassword) {
             throw new ApiError(400, 'BAD_REQUEST', { field: 'Password do not match' });
         }
