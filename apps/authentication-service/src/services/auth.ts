@@ -22,17 +22,17 @@ export class AuthService implements IAuthService {
 
     async signup(email: string, username: string, password: string, confirmPassword: string): Promise<IUser> {
         if (password !== confirmPassword) {
-            throw new ApiError(400, 'BAD_REQUEST', { field: 'Password do not match' });
+            throw new ApiError(400, 'BAD_REQUEST', [{ message: 'Password do not match' }]);
         }
 
         const existingEmail = await this.prisma.user.findFirst({where: { email }});
         if (existingEmail) {
-            throw new ApiError(400, 'BAD_REQUEST', { field: 'Email is already taken' });
+            throw new ApiError(400, 'BAD_REQUEST', [{ message: 'Email is already taken' }]);
         }
 
         const existingUsername = await this.prisma.user.findFirst({where: { username }});
         if (existingUsername) {
-            throw new ApiError(400, 'BAD_REQUEST', { field: 'Username is already taken' });
+            throw new ApiError(400, 'BAD_REQUEST', [{ message: 'Username is already taken' }]);
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
@@ -55,7 +55,7 @@ export class AuthService implements IAuthService {
         });
 
         if (!user || !(await bcrypt.compare(password, user.password))) {
-            throw new ApiError(401, 'UNAUTHORIZED', { field: 'Invalid username or password' });
+            throw new ApiError(401, 'UNAUTHORIZED', [{ message: 'Invalid username or password' }]);
         }
 
         const accessToken = await generateToken({ "id": user.id, "username": user.username, "iss": this.JWT_KEY }, this.JWT_SECRET, "1h");
@@ -85,7 +85,7 @@ export class AuthService implements IAuthService {
     async logout(token: string): Promise<void> {
         const refreshToken = await this.prisma.token.findFirst({where: { token }});
         if (!refreshToken) {
-            throw new ApiError(404, 'NOT_FOUND', { token: 'Token Not Found' });
+            throw new ApiError(404, 'NOT_FOUND', [{ message: 'Token Not Found' }]);
         }
         await this.prisma.token.delete({where: { token }});
     }
@@ -98,13 +98,13 @@ export class AuthService implements IAuthService {
     async refreshToken(refreshToken: string): Promise<IToken> {
         const storedToken = await this.prisma.token.findFirst({ where: { token: refreshToken } });
         if (!storedToken) {
-            throw new ApiError(404, 'NOT_FOUND', { token: 'Token not found' });
+            throw new ApiError(404, 'NOT_FOUND', [{ message: 'Token not found' }]);
         }
 
         const { valid, decoded, error } = await validateToken(refreshToken, this.REFRESH_JWT_SECRET);
 
         if (!valid) {
-            throw new ApiError(401, 'UNAUTHORIZED', { token: error || 'Invalid refresh token' });
+            throw new ApiError(401, 'UNAUTHORIZED', [{ message: error || 'Invalid refresh token' }]);
         }
 
         const userData = decoded as IUser;

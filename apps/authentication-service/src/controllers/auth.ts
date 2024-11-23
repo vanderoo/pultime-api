@@ -17,7 +17,7 @@ export class AuthController {
             sendSuccessResponse(res, 201, 'USER_CREATED', data)
         } catch (error) {
             if (!(error instanceof ApiError)) {
-                error = new ApiError(500, "INTERNAL_SERVER_ERROR", { error: error.message });
+                error = new ApiError(500, "INTERNAL_SERVER_ERROR", [{ message: error.message }]);
             }
             sendErrorResponse(res, error);
         }
@@ -30,7 +30,7 @@ export class AuthController {
             sendSuccessResponse(res, 200, 'OK', data)
         } catch (error) {
             if (!(error instanceof ApiError)) {
-                error = new ApiError(500, "INTERNAL_SERVER_ERROR", { error: error.message });
+                error = new ApiError(500, "INTERNAL_SERVER_ERROR", [{ message: error.message }]);
             }
             sendErrorResponse(res, error);
         }
@@ -43,7 +43,7 @@ export class AuthController {
             sendSuccessResponse(res, 200, 'OK', {})
         }catch (error) {
             if (!(error instanceof ApiError)) {
-                error = new ApiError(500, "INTERNAL_SERVER_ERROR", {error: error.message});
+                error = new ApiError(500, "INTERNAL_SERVER_ERROR", [{ message: error.message }]);
             }
             sendErrorResponse(res, error);
         }
@@ -56,7 +56,7 @@ export class AuthController {
             sendSuccessResponse(res, 200, 'OK', data)
         } catch (error) {
             if (!(error instanceof ApiError)) {
-                error = new ApiError(500, "INTERNAL_SERVER_ERROR", { error: error.message });
+                error = new ApiError(500, "INTERNAL_SERVER_ERROR", [{ message: error.message }]);
             }
             sendErrorResponse(res, error);
         }

@@ -3,18 +3,17 @@ export interface IPage {
     total: number;
     totalPages: number;
     current: number;
-  }
-  
-  export interface ISuccessResponse<T> {
+}
+
+export interface ISuccessResponse<T> {
     code: number;
     status: string;
     data: T;
-    page?: IPage;  
-  }
-  
-  export interface IErrorResponse {
+    page?: IPage;
+}
+
+export interface IErrorResponse {
     code: number;
     status: string;
-    errors: Record<string, any>; 
-  }
-  
+    errors: Array<Record<string, any>>;
+}

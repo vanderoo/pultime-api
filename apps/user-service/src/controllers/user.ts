@@ -18,7 +18,7 @@ export class UserController {
             sendSuccessResponse(res, 200, 'USERNAME_UPDATED', data)
         } catch (error) {
             if (!(error instanceof ApiError)) {
-                error = new ApiError(500, "INTERNAL_SERVER_ERROR", { error: error.message });
+                error = new ApiError(500, "INTERNAL_SERVER_ERROR", [{ message: error.message }]);
             }
             sendErrorResponse(res, error);
         }
@@ -31,7 +31,7 @@ export class UserController {
             sendSuccessResponse(res, 200, 'USER_DELETED', data)
         } catch (error) {
             if (!(error instanceof ApiError)) {
-                error = new ApiError(500, "INTERNAL_SERVER_ERROR", { error: error.message });
+                error = new ApiError(500, "INTERNAL_SERVER_ERROR", [{ message: error.message }]);
             }
             sendErrorResponse(res, error);
         }
@@ -44,7 +44,7 @@ export class UserController {
             sendSuccessResponse(res, 200, 'USER_RETRIEVED', data)
         } catch (error) {
             if (!(error instanceof ApiError)) {
-                error = new ApiError(500, "INTERNAL_SERVER_ERROR", { error: error.message });
+                error = new ApiError(500, "INTERNAL_SERVER_ERROR", [{ message: error.message }]);
             }
             sendErrorResponse(res, error);
         }
@@ -57,7 +57,7 @@ export class UserController {
             sendSuccessResponse(res, 200, 'USER_CLASSES_RETRIEVED', data)
         } catch (error) {
             if (!(error instanceof ApiError)) {
-                error = new ApiError(500, "INTERNAL_SERVER_ERROR", { error: error.message });
+                error = new ApiError(500, "INTERNAL_SERVER_ERROR", [{ message: error.message }]);
             }
             sendErrorResponse(res, error);
         }
@@ -70,7 +70,7 @@ export class UserController {
             sendSuccessResponse(res, 200, 'USER_TEAMS_RETRIEVED', data)
         } catch (error) {
             if (!(error instanceof ApiError)) {
-                error = new ApiError(500, "INTERNAL_SERVER_ERROR", { error: error.message });
+                error = new ApiError(500, "INTERNAL_SERVER_ERROR", [{ message: error.message }]);
             }
             sendErrorResponse(res, error);
         }
