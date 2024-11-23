@@ -8,20 +8,24 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(uuid())
-  email     String   @unique @db.VarChar(255)
-  username  String   @unique @db.VarChar(255)
-  password  String   @db.VarChar(255)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id        String   @id @default(uuid()) @map("id")
+  email     String   @unique @map("email") @db.VarChar(255)
+  username  String   @unique @map("username") @db.VarChar(255)
+  password  String   @map("password") @db.VarChar(255)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
   Token     Token[]
+
+  @@map("users")
 }
 
 model Token {
-  id        String   @id @default(uuid())
-  token     String   @unique @db.VarChar(255)
-  userId    String
-  createdAt DateTime @default(now())
-  expiresAt DateTime
+  id        String   @id @default(uuid()) @map("id")
+  token     String   @unique @map("token") @db.VarChar(255)
+  userId    String   @map("user_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  expiresAt DateTime @map("expires_at")
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("tokens")
 }

@@ -8,43 +8,51 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(uuid())
-  email     String   @unique @db.VarChar(255)
-  username  String   @unique @db.VarChar(255)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id        String   @id @default(uuid()) @map("id")
+  email     String   @unique @map("email") @db.VarChar(255)
+  username  String   @unique @map("username") @db.VarChar(255)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
-  classes Class[]
-  teams   Team[]
+  classes Class[] @relation("UserClasses")
+  teams   Team[]  @relation("UserTeams")
+
+  @@map("users")
 }
 
 model Class {
-  id        String   @id @default(uuid())
-  className String   @db.VarChar(255)
-  classCode String   @unique @db.VarChar(255)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id        String   @id @default(uuid()) @map("id")
+  className String   @map("class_name") @db.VarChar(255)
+  classCode String   @unique @map("class_code") @db.VarChar(255)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
-  users    User[]
-  courseId String
-  course   Course @relation(fields: [courseId], references: [id])
+  courses Course[]
+  users   User[]   @relation("UserClasses")
+
+  @@map("classes")
 }
 
 model Course {
-  id         String   @id @default(uuid())
-  courseName String   @db.VarChar(255)
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  id         String   @id @default(uuid()) @map("id")
+  courseName String   @map("course_name") @db.VarChar(255)
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
 
-  classes Class[]
+  classId String @map("class_id")
+  class   Class  @relation(fields: [classId], references: [id])
+
+  @@map("courses")
 }
 
 model Team {
-  id        String   @id @default(uuid())
-  teamName  String   @db.VarChar(255)
-  teamCode  String   @unique @db.VarChar(255)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id        String   @id @default(uuid()) @map("id")
+  teamName  String   @map("team_name") @db.VarChar(255)
+  teamCode  String   @unique @map("team_code") @db.VarChar(255)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
-  users User[]
+  users User[] @relation("UserTeams")
+
+  @@map("teams")
 }
