@@ -1,10 +1,17 @@
 import bcrypt from "bcrypt";
-
 import { Secret } from "jsonwebtoken";
-import { PrismaClient } from "@prisma/client";
-import { IAuthService, IToken, IUser } from "../interfaces/auth";
-import { ApiError } from "../utils/api-error";
-import {generateToken, validateToken} from "../utils/token";
+import { PrismaClient } from "../database/generated-prisma-client";
+import { IAuthService } from "../interfaces/auth";
+import { ApiError } from "@libs/shared";
+import { generateToken, validateToken } from "../utils/token";
+import {
+    CreateUserRequest, EmailResetRequest,
+    LoginUserRequest,
+    RefreshTokenRequest, ResetPasswordRequest,
+    TokenResponse,
+    toUserResponse,
+    UserResponse
+} from "../models/auth";
 
 export class AuthService implements IAuthService {
 
@@ -20,97 +27,101 @@ export class AuthService implements IAuthService {
         this.prisma = prisma;
     }
 
-    async signup(email: string, username: string, password: string, confirmPassword: string): Promise<IUser> {
-        if (password !== confirmPassword) {
-            throw new ApiError(400, 'BAD_REQUEST', [{ message: 'Password do not match' }]);
+    async signup(request: CreateUserRequest): Promise<UserResponse> {
+        if (request.password !== request.confirm_password) {
+            throw new ApiError(400, 'BAD_REQUEST', [{ message: 'Passwords do not match' }]);
         }
 
-        const existingEmail = await this.prisma.user.findFirst({where: { email }});
-        if (existingEmail) {
-            throw new ApiError(400, 'BAD_REQUEST', [{ message: 'Email is already taken' }]);
+        const existingUser = await this.prisma.user.findFirst({
+            where: {
+                OR: [
+                    { email: request.email },
+                    { username: request.username },
+                ]
+            }
+        });
+
+        if(existingUser) {
+            if (existingUser.email === request.email) {
+                throw new ApiError(400, 'BAD_REQUEST', [{ message: 'Email is already taken' }]);
+            }
+            if (existingUser.username === request.username) {
+                throw new ApiError(400, 'BAD_REQUEST', [{ message: 'Username is already taken' }]);
+            }
         }
 
-        const existingUsername = await this.prisma.user.findFirst({where: { username }});
-        if (existingUsername) {
-            throw new ApiError(400, 'BAD_REQUEST', [{ message: 'Username is already taken' }]);
-        }
-
-        const hashedPassword = await bcrypt.hash(password, 10);
+        const hashedPassword = await bcrypt.hash(request.password, 10);
 
         const newUser = await this.prisma.user.create({
             data: {
-                email: email,
-                username: username,
+                email: request.email,
+                username: request.username,
                 password: hashedPassword
             }
         });
 
-        delete newUser.password;
-
-        return newUser;
+        return toUserResponse(newUser);
     }
-    async login(username: string, password: string): Promise<IToken> {
+    async login(request: LoginUserRequest): Promise<TokenResponse> {
         const user = await this.prisma.user.findUnique({
-            where: { username },
+            where: { username: request.username },
         });
 
-        if (!user || !(await bcrypt.compare(password, user.password))) {
+        if (!user || !(await bcrypt.compare(request.password, user.password))) {
             throw new ApiError(401, 'UNAUTHORIZED', [{ message: 'Invalid username or password' }]);
         }
 
-        const accessToken = await generateToken({ "id": user.id, "username": user.username, "iss": this.JWT_KEY }, this.JWT_SECRET, "1h");
+        const accessToken = await generateToken(
+            { "id": user.id, "username": user.username, "iss": this.JWT_KEY },
+            this.JWT_SECRET, "1h"
+        );
 
-        const refreshToken = await generateToken({ 'id': user.id, 'username': user.username }, this.REFRESH_JWT_SECRET, "7d");
+        const refreshToken = await generateToken(
+            { 'id': user.id, 'username': user.username },
+            this.REFRESH_JWT_SECRET, "7d"
+        );
 
         const expiresAt = new Date();
         expiresAt.setDate(expiresAt.getDate() + 7);
+
         const accessTokenExpires = new Date();
         accessTokenExpires.setHours(accessTokenExpires.getHours() + 1);
 
         await this.prisma.token.create({
             data: {
                 userId: user.id,
-                token: refreshToken,
+                refreshToken: refreshToken,
                 expiresAt: expiresAt,
             }
         });
 
         return {
-            userId: user.id,
-            accessToken: accessToken,
-            refreshToken: refreshToken,
-            accessTokenExpires: accessTokenExpires
+            access_token: accessToken,
+            access_token_expires: accessTokenExpires,
+            refresh_token: refreshToken,
         };
     }
-    async logout(token: string): Promise<void> {
-        const refreshToken = await this.prisma.token.findFirst({where: { token }});
-        if (!refreshToken) {
-            throw new ApiError(404, 'NOT_FOUND', [{ message: 'Token Not Found' }]);
-        }
-        await this.prisma.token.delete({where: { token }});
-    }
-    async requestResetPassword(email: string): Promise<void> {
-        throw new Error("Method not implemented.");
-    }
-    async resetPassword(token: string, newPassword: string): Promise<void> {
-        throw new Error("Method not implemented.");
-    }
-    async refreshToken(refreshToken: string): Promise<IToken> {
-        const storedToken = await this.prisma.token.findFirst({ where: { token: refreshToken } });
+    async refreshToken(request: RefreshTokenRequest): Promise<TokenResponse> {
+        const storedToken = await this.prisma.token.findFirst({
+            where: {
+                refreshToken: request.refresh_token
+            }
+        });
+
         if (!storedToken) {
             throw new ApiError(404, 'NOT_FOUND', [{ message: 'Token not found' }]);
         }
 
-        const { valid, decoded, error } = await validateToken(refreshToken, this.REFRESH_JWT_SECRET);
+        const { valid, decoded, error } = await validateToken(request.refresh_token, this.REFRESH_JWT_SECRET);
 
         if (!valid) {
-            throw new ApiError(401, 'UNAUTHORIZED', [{ message: error || 'Invalid refresh token' }]);
+            throw new ApiError(401, 'UNAUTHORIZED', [{ message: error || 'Invalid token' }]);
         }
 
-        const userData = decoded as IUser;
+        const userData = decoded;
 
         const newToken = await generateToken(
-            { id: userData.id, username: userData.username, iss: this.JWT_KEY },
+            { "id": userData.id, "username": userData.username, "iss": this.JWT_KEY },
             this.JWT_SECRET,
             "1h"
         );
@@ -119,9 +130,25 @@ export class AuthService implements IAuthService {
         accessTokenExpires.setHours(accessTokenExpires.getHours() + 1);
 
         return {
-            userId: userData.id,
-            accessToken: newToken,
-            accessTokenExpires: accessTokenExpires
-        };
+            access_token: newToken,
+            access_token_expires: accessTokenExpires,
+        }
+    }
+    async logout(request: RefreshTokenRequest): Promise<void> {
+        const refreshToken = await this.prisma.token.findFirst({
+            where: {
+                refreshToken: request.refresh_token
+            }
+        });
+        if (!refreshToken) {
+            throw new ApiError(404, 'NOT_FOUND', [{ message: 'Token Not Found' }]);
+        }
+        await this.prisma.token.delete({where: { refreshToken: request.refresh_token }});
+    }
+    async requestResetPassword(request: EmailResetRequest): Promise<void> {
+        throw new Error("Method not implemented.");
+    }
+    async resetPassword(request: ResetPasswordRequest): Promise<void> {
+        throw new Error("Method not implemented.");
     }
 }

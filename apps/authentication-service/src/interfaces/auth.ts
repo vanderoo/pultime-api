@@ -1,23 +1,17 @@
-export interface IUser {
-    id: string;
-    email: string;
-    username: string;
-    createdAt: Date;
-    updatedAt: Date;
-}
+import {
+    CreateUserRequest, EmailResetRequest,
+    LoginUserRequest,
+    RefreshTokenRequest,
+    ResetPasswordRequest,
+    TokenResponse,
+    UserResponse
+} from "../models/auth";
 
-export interface IToken {
-    userId: string;
-    accessToken: string;
-    accessTokenExpires: Date;
-    refreshToken?: string;
-}
-  
 export interface IAuthService {
-    signup(email: string, username: string, password: string, confirmPassword: string): Promise<IUser>;
-    login(username: string, password: string): Promise<IToken>;
-    logout(token: string): Promise<void>
-    requestResetPassword(email: string): Promise<void>;
-    resetPassword(token: string, newPassword: string): Promise<void>;
-    refreshToken(refreshToken: string): Promise<IToken>;
+    signup(request: CreateUserRequest): Promise<UserResponse>;
+    login(request: LoginUserRequest): Promise<TokenResponse>;
+    refreshToken(request: RefreshTokenRequest): Promise<TokenResponse>;
+    logout(request: RefreshTokenRequest): Promise<void>
+    requestResetPassword(request: EmailResetRequest): Promise<void>;
+    resetPassword(request: ResetPasswordRequest): Promise<void>;
 }

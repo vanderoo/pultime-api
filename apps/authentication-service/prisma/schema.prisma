@@ -1,5 +1,7 @@
 generator client {
   provider = "prisma-client-js"
+  output   = "../src/database/generated-prisma-client"
+  binaryTargets = ["native", "debian-openssl-3.0.x"]
 }
 
 datasource db {
@@ -20,12 +22,12 @@ model User {
 }
 
 model Token {
-  id        String   @id @default(uuid()) @map("id")
-  token     String   @unique @map("token") @db.VarChar(255)
-  userId    String   @map("user_id")
-  createdAt DateTime @default(now()) @map("created_at")
-  expiresAt DateTime @map("expires_at")
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id           String   @id @default(uuid()) @map("id")
+  refreshToken String   @unique @map("refresh_token") @db.VarChar(255)
+  userId       String   @map("user_id")
+  createdAt    DateTime @default(now()) @map("created_at")
+  expiresAt    DateTime @map("expires_at")
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("tokens")
 }

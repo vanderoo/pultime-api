@@ -4,17 +4,10 @@ info:
   version: 1.0.0
 
 paths:
-  /user/{id}:
+  /user/current:
     patch:
       tags:
         - User
-      parameters:
-        - name: id
-          in: path
-          required: true
-          description: ID pengguna yang ingin diupdate
-          schema:
-            type: string
       requestBody:
         required: true
         content:
@@ -35,40 +28,9 @@ paths:
               schema:
                 $ref: '../schemas/error-schema.yaml#/components/schemas/ErrorResponse'
 
-    delete:
-      tags:
-        - User
-      parameters:
-        - name: id
-          in: path
-          required: true
-          description: ID pengguna yang ingin dihapus
-          schema:
-            type: string
-      responses:
-        200:
-          description: Berhasil menghapus pengguna
-          content:
-            application/json:
-              schema:
-                $ref: '../schemas/user-schema.yaml#/components/schemas/GetUserByIdResponse'
-        400:
-          description: Gagal menghapus pengguna
-          content:
-            application/json:
-              schema:
-                $ref: '../schemas/error-schema.yaml#/components/schemas/ErrorResponse'
-
     get:
       tags:
         - User
-      parameters:
-        - name: id
-          in: path
-          required: true
-          description: ID pengguna yang ingin diambil
-          schema:
-            type: string
       responses:
         200:
           description: Berhasil mengambil data pengguna
@@ -83,17 +45,10 @@ paths:
               schema:
                 $ref: '../schemas/error-schema.yaml#/components/schemas/ErrorResponse'
 
-  /user/{id}/classes:
+  /user/current/classes:
     get:
       tags:
         - User
-      parameters:
-        - name: id
-          in: path
-          required: true
-          description: ID pengguna yang ingin diambil
-          schema:
-            type: string
       responses:
         200:
           description: Berhasil mengambil data kelas pengguna
@@ -108,17 +63,10 @@ paths:
               schema:
                 $ref: '../schemas/error-schema.yaml#/components/schemas/ErrorResponse'
 
-  /user/{id}/teams:
+  /user/current/teams:
     get:
       tags:
         - User
-      parameters:
-        - name: id
-          in: path
-          required: true
-          description: ID pengguna yang ingin diambil
-          schema:
-            type: string
       responses:
         200:
           description: Berhasil mengambil data tim pengguna

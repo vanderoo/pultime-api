@@ -1,6 +1,14 @@
-import {IClass, ITeam, IUser, IUserService} from "../interfaces/user";
-import {PrismaClient} from "@prisma/client";
-import {ApiError} from "../utils/api-error";
+import { IUserService } from "../interfaces/user";
+import { PrismaClient, User } from "../database/generated-prisma-client";
+import { ApiError } from "@libs/shared";
+import {
+    toUserClassesResponse,
+    toUserResponse,
+    toUserTeamsResponse, UpdateUserRequest,
+    UserClassesResponse,
+    UserResponse,
+    UserTeamsResponse
+} from "../models/user";
 
 export class UserService implements IUserService{
 
@@ -10,64 +18,51 @@ export class UserService implements IUserService{
         this.prisma = prisma;
     }
 
-    async delete(id: string): Promise<IUser> {
-        const userToDelete = await this.prisma.user.findFirst({where: {id}});
-        if (!userToDelete) {
-            throw new ApiError(404, 'USER_NOT_FOUND', [{ message: `User with ID ${id} not found` }]);
-        }
-        await this.prisma.user.delete({where: {id}});
-        return userToDelete;
-    }
-
-    async findById(id: string): Promise<IUser> {
-        const user = await this.prisma.user.findUnique({
-            where: { id },
+    async updateUsername(user: User, request: UpdateUserRequest): Promise<UserResponse> {
+        const usernameExist = await this.prisma.user.findUnique({
+            where: { username: request.username },
         });
-        if (!user) {
-            throw new ApiError(404, 'USER_NOT_FOUND', [{ message: `User with ID ${id} not found` }]);
+        if (usernameExist) {
+            throw new ApiError(400, 'USERNAME_ALREADY_EXISTS', [{
+                message: `Username ${request.username} is already taken`
+            }]);
         }
-        return user;
+        const updatedUser = await this.prisma.user.update({
+            where: { id: user.id },
+            data: { username: request.username },
+        });
+        return toUserResponse(updatedUser);
     }
 
-    async listUserClasses(id: string): Promise<IClass[]> {
-        const user = await this.prisma.user.findUnique({
-            where: { id },
+    async get(user: User): Promise<UserResponse> {
+        const userToFind = await this.prisma.user.findUnique({
+            where: { id: user.id },
+        });
+        if (!userToFind) {
+            throw new ApiError(404, 'USER_NOT_FOUND', [{ message: `User with ID ${user.id} not found` }]);
+        }
+        return toUserResponse(userToFind);
+    }
+
+    async listUserClasses(user: User): Promise<UserClassesResponse[]> {
+        const userToFind = await this.prisma.user.findUnique({
+            where: { id: user.id },
             include: { classes: { include: { courses: true } } },
         });
-        if (!user) {
-            throw new ApiError(404, 'USER_NOT_FOUND', [{ message: `User with ID ${id} not found` }]);
+        if (!userToFind) {
+            throw new ApiError(404, 'USER_NOT_FOUND', [{ message: `User with ID ${user.id} not found` }]);
         }
-
-        return user.classes
+        return toUserClassesResponse(userToFind);
     }
 
-    async listUserTeams(id: string): Promise<ITeam[]> {
-        const user = await this.prisma.user.findUnique({
-            where: { id },
+    async listUserTeams(user: User): Promise<UserTeamsResponse[]> {
+        const userToFind = await this.prisma.user.findUnique({
+            where: { id: user.id },
             include: { teams: true },
         });
-        if (!user) {
-            throw new ApiError(404, 'USER_NOT_FOUND', [{ message: `User with ID ${id} not found` }]);
+        if (!userToFind) {
+            throw new ApiError(404, 'USER_NOT_FOUND', [{ message: `User with ID ${user.id} not found` }]);
         }
-        return user.teams
-    }
-
-    async updateUsername(id: string, username: string): Promise<IUser> {
-        const user = await this.prisma.user.findUnique({
-            where: { id },
-        });
-        if (!user) {
-            throw new ApiError(404, 'USER_NOT_FOUND', [{ message: `User with ID ${id} not found` }]);
-        }
-        const existingUser = await this.prisma.user.findUnique({
-            where: { username },
-        });
-        if (existingUser) {
-            throw new ApiError(400, 'USERNAME_ALREADY_EXISTS', [{ message: `Username ${username} is already taken` }]);
-        }
-        return this.prisma.user.update({
-            where: {id},
-            data: {username},
-        });
+        return toUserTeamsResponse(userToFind);
     }
 }

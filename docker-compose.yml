@@ -3,8 +3,8 @@ version: '3.8'
 services:
   authentication-service:
     build:
-      context: apps/authentication-service
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: apps/authentication-service/Dockerfile
       args:
         DATABASE_URL: ${AUTH_DB_URL}
     env_file:
@@ -18,8 +18,8 @@ services:
 
   user-service:
     build:
-      context: apps/user-service
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: apps/user-service/Dockerfile
       args:
         DATABASE_URL: ${USER_DB_URL}
     env_file:

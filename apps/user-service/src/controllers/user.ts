@@ -1,7 +1,7 @@
-import { Request, Response } from "express";
+import {NextFunction, Response} from "express";
 import { UserService } from "../services/user";
-import { sendErrorResponse, sendSuccessResponse } from "../utils/response";
-import { ApiError } from "../utils/api-error";
+import { sendSuccessResponse, UserRequest } from "@libs/shared";
+import { UpdateUserRequest } from "../models/user";
 
 export class UserController {
     private userService: UserService;
@@ -10,69 +10,40 @@ export class UserController {
         this.userService = userService;
     }
 
-    async updateUsername(req: Request, res: Response) {
+    async updateUsername(req: UserRequest, res: Response, next: NextFunction) {
         try {
-            const userId = req.params.id;
-            const { username } = req.body;
-            const data = await this.userService.updateUsername(userId, username);
+            const request = req.body as UpdateUserRequest;
+            const data = await this.userService.updateUsername(req.user, request);
             sendSuccessResponse(res, 200, 'USERNAME_UPDATED', data)
         } catch (error) {
-            if (!(error instanceof ApiError)) {
-                error = new ApiError(500, "INTERNAL_SERVER_ERROR", [{ message: error.message }]);
-            }
-            sendErrorResponse(res, error);
+            next(error);
         }
     }
 
-    async delete(req: Request, res: Response) {
+    async get(req: UserRequest, res: Response, next: NextFunction) {
         try {
-            const userId = req.params.id;
-            const data = await this.userService.delete(userId);
-            sendSuccessResponse(res, 200, 'USER_DELETED', data)
-        } catch (error) {
-            if (!(error instanceof ApiError)) {
-                error = new ApiError(500, "INTERNAL_SERVER_ERROR", [{ message: error.message }]);
-            }
-            sendErrorResponse(res, error);
-        }
-    }
-
-    async findById(req: Request, res: Response) {
-        try {
-            const userId = req.params.id;
-            const data = await this.userService.findById(userId);
+            const data = await this.userService.get(req.user);
             sendSuccessResponse(res, 200, 'USER_RETRIEVED', data)
         } catch (error) {
-            if (!(error instanceof ApiError)) {
-                error = new ApiError(500, "INTERNAL_SERVER_ERROR", [{ message: error.message }]);
-            }
-            sendErrorResponse(res, error);
+            next(error);
         }
     }
 
-    async listUserClasses(req: Request, res: Response) {
+    async listUserClasses(req: UserRequest, res: Response, next: NextFunction) {
         try {
-            const userId = req.params.id;
-            const data = await this.userService.listUserClasses(userId);
+            const data = await this.userService.listUserClasses(req.user);
             sendSuccessResponse(res, 200, 'USER_CLASSES_RETRIEVED', data)
         } catch (error) {
-            if (!(error instanceof ApiError)) {
-                error = new ApiError(500, "INTERNAL_SERVER_ERROR", [{ message: error.message }]);
-            }
-            sendErrorResponse(res, error);
+            next(error);
         }
     }
 
-    async listUserTeam(req: Request, res: Response){
+    async listUserTeam(req: UserRequest, res: Response, next: NextFunction){
         try {
-            const userId = req.params.id;
-            const data = await this.userService.listUserTeams(userId);
+            const data = await this.userService.listUserTeams(req.user);
             sendSuccessResponse(res, 200, 'USER_TEAMS_RETRIEVED', data)
         } catch (error) {
-            if (!(error instanceof ApiError)) {
-                error = new ApiError(500, "INTERNAL_SERVER_ERROR", [{ message: error.message }]);
-            }
-            sendErrorResponse(res, error);
+            next(error);
         }
     }
 }

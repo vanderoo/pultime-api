@@ -61,13 +61,13 @@ components:
                     type: string
                   course_name:
                     type: string
-                  createdAt:
+                  created_at:
                     type: string
-                  updatedAt:
+                  updated_at:
                     type: string
-            createdAt:
+            created_at:
               type: string
-            updatedAt:
+            updated_at:
               type: string
 
     ClassMemberRequest:
@@ -99,9 +99,9 @@ components:
               type: string
             username:
               type: string
-            createdAt:
+            created_at:
               type: string
-            updatedAt:
+            updated_at:
               type: string
 
     ClassMembersResponse:
@@ -124,8 +124,7 @@ components:
                 type: string
               username:
                 type: string
-              createdAt:
+              created_at:
                 type: string
-              updatedAt:
+              updated_at:
                 type: string
-

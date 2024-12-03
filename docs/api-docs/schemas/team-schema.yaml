@@ -6,7 +6,7 @@ components:
         team_name:
           type: string
       required:
-      - team_name
+        - team_name
 
     TeamResponse:
       type: object
@@ -26,9 +26,9 @@ components:
               type: string
             team_code:
               type: string
-            createdAt:
+            created_at:
               type: string
-            updatedAt:
+            updated_at:
               type: string
 
     TeamMemberRequest:
@@ -60,9 +60,9 @@ components:
               type: string
             username:
               type: string
-            createdAt:
+            created_at:
               type: string
-            updatedAt:
+            updated_at:
               type: string
 
     TeamMembersResponse:
@@ -85,8 +85,7 @@ components:
                 type: string
               username:
                 type: string
-              createdAt:
+              created_at:
                 type: string
-              updatedAt:
+              updated_at:
                 type: string
-

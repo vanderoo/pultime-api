@@ -1,5 +1,6 @@
 generator client {
   provider = "prisma-client-js"
+  output   = "../src/database/generated-prisma-client"
 }
 
 datasource db {
@@ -8,9 +9,38 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(uuid())
-  email     String   @unique @db.VarChar(255)
-  username  String   @unique @db.VarChar(255)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id        String   @id @default(uuid()) @map("id")
+  email     String   @unique @map("email") @db.VarChar(255)
+  username  String   @unique @map("username") @db.VarChar(255)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  classes Class[] @relation("UserClasses")
+
+  @@map("users")
+}
+
+model Class {
+  id        String   @id @default(uuid()) @map("id")
+  className String   @map("class_name") @db.VarChar(255)
+  classCode String   @unique @map("class_code") @db.VarChar(255)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  courses Course[]
+  users   User[]   @relation("UserClasses")
+
+  @@map("classes")
+}
+
+model Course {
+  id         String   @id @default(uuid()) @map("id")
+  courseName String   @map("course_name") @db.VarChar(255)
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  classId String @map("class_id")
+  class   Class  @relation(fields: [classId], references: [id])
+
+  @@map("courses")
 }

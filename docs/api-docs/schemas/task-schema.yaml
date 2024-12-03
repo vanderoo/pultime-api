@@ -40,7 +40,7 @@ components:
               type: string
             deadline:
               type: string
-            createdAt:
+            created_at:
               type: string
-            updatedAt:
+            updated_at:
               type: string

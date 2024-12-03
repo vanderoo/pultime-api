@@ -28,14 +28,14 @@ paths:
   /auth/reset-password:
     $ref: './auth-service.yaml#/paths/~1auth~1reset-password'
 
-  /user/{id}:
-    $ref: './user-service.yaml#/paths/~1user~1{id}'
+  /user/current:
+    $ref: './user-service.yaml#/paths/~1user~1current'
 
-  /user/{id}/classes:
-    $ref: './user-service.yaml#/paths/~1user~1{id}~1classes'
+  /user/current/classes:
+    $ref: './user-service.yaml#/paths/~1user~1current~1classes'
 
-  /user/{id}/teams:
-    $ref: './user-service.yaml#/paths/~1user~1{id}~1teams'
+  /user/current/teams:
+    $ref: './user-service.yaml#/paths/~1user~1current~1teams'
 
   /class:
     $ref: './class-service.yaml#/paths/~1class'

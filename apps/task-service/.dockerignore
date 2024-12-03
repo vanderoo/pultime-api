@@ -11,3 +11,7 @@ dist
 .git
 .gitignore
 Dockerfile
+**/*/test/
+**/*.test.ts
+**/*.spec.ts
+**/*/generated-prisma-client/

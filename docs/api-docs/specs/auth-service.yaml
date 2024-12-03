@@ -52,7 +52,7 @@ paths:
                 $ref: '../schemas/error-schema.yaml#/components/schemas/ErrorResponse'
 
   /auth/logout:
-    post:
+    delete:
       tags:
         - Authentication
       requestBody:

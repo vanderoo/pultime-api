@@ -9,13 +9,13 @@ components:
           type: string
         password:
           type: string
-        confirmPassword:
+        confirm_password:
           type: string
       required:
         - email
         - username
         - password
-        - confirmPassword
+        - confirm_password
 
     RegisterResponse:
       type: object
@@ -35,9 +35,9 @@ components:
               type: string
             username:
               type: string
-            createdAt:
+            created_at:
               type: string
-            updatedAt:
+            updated_at:
               type: string
 
     LoginRequest:
@@ -63,18 +63,18 @@ components:
         data:
           type: object
           properties:
-            accessToken:
+            access_token:
               type: string
-            refreshToken:
+            refresh_token:
               type: string
 
     LogoutRequest:
       type: object
       properties:
-        refreshToken:
+        refresh_token:
           type: string
       required:
-        - refreshToken
+        - refresh_token
 
     LogoutResponse:
       type: object
@@ -95,10 +95,10 @@ components:
     RefreshTokenRequest:
       type: object
       properties:
-        refreshToken:
+        refresh_token:
           type: string
       required:
-        - refreshToken
+        - refresh_token
 
     RefreshTokenResponse:
       type: object
@@ -112,7 +112,7 @@ components:
         data:
           type: object
           properties:
-            accessToken:
+            access_token:
               type: string
 
     ReqResetPasswordRequest:
@@ -142,10 +142,13 @@ components:
     ResetPasswordRequest:
       type: object
       properties:
-        newPassword:
+        password:
+          type: string
+        confirm_password:
           type: string
       required:
-        - newPassword
+        - password
+        - confirm_password
 
     ResetPasswordResponse:
       type: object
