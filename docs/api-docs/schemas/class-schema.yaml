@@ -75,11 +75,8 @@ components:
       properties:
         user_id:
           type: string
-        class_code:
-          type: string
       required:
         - user_id
-        - class_code
 
     ClassMemberResponse:
       type: object

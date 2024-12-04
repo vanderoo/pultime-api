@@ -4,7 +4,8 @@ import { ApiError } from "@libs/shared";
 import {
     toUserClassesResponse,
     toUserResponse,
-    toUserTeamsResponse, UpdateUserRequest,
+    toUserTeamsResponse,
+    UpdateUserRequest,
     UserClassesResponse,
     UserResponse,
     UserTeamsResponse

@@ -1,11 +1,13 @@
 import cors from "cors";
 import express, { Express } from "express";
-import { authMiddleware, initializeDatabase } from "shared";
 import { apiRoutes } from "./routes";
 import { PrismaClient } from "./database/generated-prisma-client";
-import { errorMiddleware } from "shared";
-import { corsOptions } from "shared";
-import { logger } from "shared";
+import {
+  errorMiddleware,
+  corsOptions,
+  logger,
+  initializeDatabase
+} from "@libs/shared";
 
 export class Server {
   private readonly app: Express;
@@ -28,8 +30,7 @@ export class Server {
     this.app.use(cors(corsOptions));
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: true }));
-    this.app.use(authMiddleware(this.prisma, process.env.JWT_SECRET));
-    this.app.use("/class", apiRoutes(this.prisma));
+    this.app.use('/class', apiRoutes(this.prisma));
     this.app.use(errorMiddleware);
   }
 

@@ -163,10 +163,17 @@ paths:
               schema:
                 $ref: '../schemas/error-schema.yaml#/components/schemas/ErrorResponse'
 
-  /class/users:
+  /class/{class_code}/users:
     post:
       tags:
         - Class
+      parameters:
+        - name: class_code
+          in: path
+          required: true
+          description: The class code of the class where the user will be added.
+          schema:
+            type: string  
       requestBody:
         required: true
         content:
